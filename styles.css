@@ -1,0 +1,6 @@
+/* ============================================================
+   FUTURA PRINT — Design System entry point
+   Single root stylesheet. Consumers link THIS file; it pulls in
+   the token + type foundations. Add future global sheets here.
+   ============================================================ */
+@import "colors_and_type.css";

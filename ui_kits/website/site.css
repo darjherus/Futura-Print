@@ -1,0 +1,59 @@
+/* Futura Print — website UI kit helpers (in addition to colors_and_type.css) */
+*{box-sizing:border-box}
+html,body{margin:0}
+body.fp-site{
+  font-family:var(--font-sans);
+  background:var(--bg);
+  color:var(--fg1);
+  -webkit-font-smoothing:antialiased;
+}
+.fp-wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--font-sans)}
+
+/* ----- buttons ----- */
+.btn{
+  display:inline-flex;align-items:center;gap:9px;cursor:pointer;border:0;
+  font-weight:700;font-size:15px;letter-spacing:-.01em;line-height:1;
+  padding:15px 26px;border-radius:var(--r-md);
+  transition:transform var(--dur-fast) var(--ease-out),box-shadow var(--dur-base) var(--ease-out),background var(--dur-base);
+}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn-primary{background:var(--teal-500);color:#fff;box-shadow:var(--shadow-teal),var(--sheen-top)}
+.btn-primary:hover{background:var(--teal-600);transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,177,184,.42),var(--sheen-top)}
+.btn-primary:active{box-shadow:var(--inset-deep)}
+.btn-accent{background:var(--orange-500);color:#fff;box-shadow:var(--shadow-orange),var(--sheen-top)}
+.btn-accent:hover{background:var(--orange-600);transform:translateY(-2px);box-shadow:0 12px 28px rgba(232,75,30,.42),var(--sheen-top)}
+.btn-ghost{background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px var(--border-strong)}
+.btn-ghost:hover{box-shadow:inset 0 0 0 1.5px var(--fg2);transform:translateY(-2px)}
+.btn-light{background:#fff;color:var(--ink);box-shadow:var(--shadow-md),var(--sheen-top)}
+.btn-light:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.btn-lg{padding:18px 32px;font-size:16px;border-radius:var(--r-lg)}
+.btn-sm{padding:10px 18px;font-size:13px}
+
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-ink)}
+
+/* photo placeholder slot */
+.photo{
+  position:relative;overflow:hidden;background:linear-gradient(135deg,var(--teal-700),var(--ink));
+}
+.photo .ph-label{
+  position:absolute;left:0;right:0;bottom:0;padding:14px 16px;z-index:3;
+  display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.92);
+  font-size:12px;font-weight:600;letter-spacing:.04em;
+  background:linear-gradient(to top,rgba(17,17,16,.6),transparent);
+}
+.photo .ph-mark{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.28);z-index:2;
+}
+
+/* scroll reveal — visible by default; .in plays an entrance animation.
+   (CSS transitions can stall at their start value in the scaled preview
+   iframe, so opacity:0 is never used as a persistent base state.) */
+.reveal{will-change:opacity,transform}
+.reveal.in{animation:fpRise .7s var(--ease-out) both}
+@keyframes fpRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.reveal.in{animation:none}}
+
+::selection{background:var(--teal-200);color:var(--ink)}

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Landing Page" subtitle="Skeuomorphic institutional + portfolio site" viewport="1280x760" -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Futura Print — Onde a Dimensão Encontra a Impressão</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.294.0/dist/umd/lucide.min.js"></script>
+<style>
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--ink);color:#fff;font-family:var(--font-sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+  a{color:inherit;text-decoration:none}
+  section{position:relative}
+  .eyebrow{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+
+  /* ---------- physical button / plaque ---------- */
+  .plaque{
+    display:inline-flex;align-items:center;gap:11px;cursor:pointer;border:0;
+    font-family:var(--font-sans);font-weight:800;font-size:16px;letter-spacing:-.01em;
+    padding:18px 32px;border-radius:var(--r-lg);color:#fff;position:relative;
+    transition:transform .14s var(--ease-out),box-shadow .24s var(--ease-out),filter .2s;
+  }
+  .plaque svg{width:20px;height:20px}
+  .plaque-orange{
+    background:linear-gradient(160deg,#ff6a3d 0%,var(--orange-500) 46%,var(--orange-700) 100%);
+    box-shadow:0 1px 0 rgba(255,255,255,.4) inset, 0 -3px 8px rgba(120,30,10,.5) inset,
+               0 12px 26px rgba(232,75,30,.45), 0 3px 6px rgba(94,32,16,.5), var(--emboss);
+  }
+  .plaque-orange:hover{transform:translateY(-3px);filter:brightness(1.06);
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 -3px 8px rgba(120,30,10,.5) inset,
+               0 18px 38px rgba(232,75,30,.55),0 4px 8px rgba(94,32,16,.5),var(--emboss-lg)}
+  .plaque-orange:active{transform:translateY(1px);
+    box-shadow:var(--inset-deep),0 4px 10px rgba(232,75,30,.3)}
+  .plaque-ghost{
+    background:rgba(255,255,255,.04);color:#fff;
+    box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.22),inset 0 1px 0 rgba(255,255,255,.12);
+  }
+  .plaque-ghost:hover{background:rgba(255,255,255,.09);transform:translateY(-3px)}
+  .plaque-teal{
+    background:linear-gradient(160deg,#22d3da 0%,var(--teal-500) 46%,var(--teal-700) 100%);
+    box-shadow:0 1px 0 rgba(255,255,255,.45) inset,0 -3px 8px rgba(7,90,94,.5) inset,
+               0 12px 26px rgba(0,177,184,.42),0 3px 6px rgba(7,90,94,.5);
+  }
+  .plaque-teal:hover{transform:translateY(-3px);filter:brightness(1.06)}
+
+  /* ---------- header ---------- */
+  header{position:sticky;top:0;z-index:60;transition:background .3s,backdrop-filter .3s,border-color .3s}
+  header.scrolled{background:rgba(13,13,12,.72);backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);border-bottom:1px solid rgba(255,255,255,.10)}
+  header .bar{display:flex;align-items:center;justify-content:space-between;height:80px}
+  header nav{display:flex;gap:4px}
+  header nav a{font-weight:600;font-size:15px;color:rgba(255,255,255,.82);padding:10px 16px;border-radius:12px;transition:.2s}
+  header nav a:hover{color:#fff;background:rgba(255,255,255,.06)}
+  .navcta{font-weight:700;font-size:14px;padding:11px 22px;border-radius:999px}
+  .bar-right{display:flex;align-items:center;gap:12px}
+  .nav-ig{width:42px;height:42px;flex:0 0 auto;border-radius:999px;display:flex;align-items:center;justify-content:center;
+    color:#fff;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);transition:background .2s,transform .2s,border-color .2s}
+  .nav-ig:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.32);transform:translateY(-2px)}
+  .nav-ig svg{width:19px;height:19px}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;overflow:hidden;padding:150px 0 120px;margin-top:-80px;background:radial-gradient(120% 90% at 78% 8%,#0d2b2c 0%,var(--ink) 46%)}
+  .hero h1{font-weight:900;font-size:clamp(48px,6.6vw,96px);line-height:.98;letter-spacing:-.035em;margin:24px 0 0;max-width:600px}
+  .hero .sub{font-size:21px;line-height:1.6;color:rgba(255,255,255,.74);max-width:480px;margin-top:28px}
+  .hero .cta{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap}
+  .badge{display:inline-flex;align-items:center;gap:10px;padding:9px 18px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);font-size:13px;font-weight:600;letter-spacing:.05em;color:rgba(255,255,255,.86)}
+  .pulse{width:9px;height:9px;border-radius:50%;background:var(--orange-500);box-shadow:0 0 12px var(--orange-500)}
+
+  /* hero reel — sits on the right, BEHIND the copy; every outer edge is
+     feathered into the dark ground so no video border is ever visible */
+  .hero-video{position:absolute;top:0;right:0;width:78%;height:100%;z-index:0;pointer-events:none;
+    -webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,0) 0%, #000 20%, #000 80%, rgba(0,0,0,0) 100%);
+    mask-image:linear-gradient(to bottom, rgba(0,0,0,0) 0%, #000 20%, #000 80%, rgba(0,0,0,0) 100%)}
+  .hero-video video{
+    width:100%;height:100%;object-fit:cover;display:block;
+    -webkit-mask-image:radial-gradient(120% 150% at 80% 50%, #000 54%, rgba(0,0,0,0) 88%);
+    mask-image:radial-gradient(120% 150% at 80% 50%, #000 54%, rgba(0,0,0,0) 88%);
+  }
+  /* glassmorphism scrim — frosts the video behind the copy for legibility
+     while letting it show through; feathers away to the right so the reel
+     stays crisp and fully visible there (no hard edge, gentle gradient) */
+  .hero-scrim{position:absolute;inset:0 42% 0 0;z-index:1;pointer-events:none;
+    -webkit-backdrop-filter:blur(22px) saturate(1.08);backdrop-filter:blur(22px) saturate(1.08);
+    background:linear-gradient(to right, rgba(13,13,12,.50), rgba(13,13,12,.16) 58%, rgba(13,13,12,0));
+    -webkit-mask-image:linear-gradient(to right, #000 52%, rgba(0,0,0,0) 100%);
+    mask-image:linear-gradient(to right, #000 52%, rgba(0,0,0,0) 100%)}
+
+  /* ---------- stat strip ---------- */
+  .stats{background:var(--teal-600);padding:66px 0}
+  .stats .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;z-index:2}
+  .stat{text-align:center}
+  .stat .n{font-weight:900;font-size:clamp(38px,4.6vw,62px);letter-spacing:-.03em;line-height:1;text-shadow:0 2px 0 rgba(7,90,94,.4)}
+  .stat .l{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.85);margin-top:10px}
+
+  /* ---------- services (white) ---------- */
+  .services{background:#fff;color:var(--ink);padding:110px 0}
+  .services-head-row{display:flex;align-items:center;justify-content:space-between;gap:40px;margin-bottom:56px}
+  .services-head-row .sec-head{margin-bottom:0;flex:1 1 auto}
+  .services-fig{flex:0 0 auto;width:400px;max-width:44%;position:relative}
+  .services-fig img{display:block;width:100%;height:auto;filter:drop-shadow(0 18px 30px rgba(17,17,16,.18))}
+  .services .sec-head p{color:var(--n-600)}
+  .sec-head{max-width:680px;margin-bottom:56px}
+  .sec-head h2{font-weight:800;font-size:clamp(36px,4.4vw,56px);letter-spacing:-.025em;line-height:1.03;margin:14px 0 18px}
+  .sec-head p{font-size:19px;line-height:1.6;color:var(--fg2);margin:0}
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .svc{
+    position:relative;border-radius:var(--r-2xl);padding:34px 30px 32px;overflow:hidden;
+    background:linear-gradient(165deg,#15c2c9 0%,var(--teal-600) 60%,var(--teal-800) 100%);
+    color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 -6px 16px rgba(7,90,94,.4) inset,var(--shadow-lg);
+    transition:transform .28s var(--ease-out),box-shadow .28s var(--ease-out);
+  }
+  .svc:hover{transform:translateY(-6px);box-shadow:0 1px 0 rgba(255,255,255,.45) inset,0 -6px 16px rgba(7,90,94,.4) inset,var(--shadow-xl)}
+  .svc .plinth{
+    width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,var(--teal-700),var(--teal-900));margin-bottom:22px;color:#7fe5e9;
+    box-shadow:var(--engrave),0 1px 0 rgba(255,255,255,.12);
+  }
+  .svc .plinth svg{width:34px;height:34px;stroke-width:1.7;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+  .svc h3{font-weight:800;font-size:22px;letter-spacing:-.01em;margin:0 0 9px}
+  .svc p{font-size:15px;line-height:1.6;color:rgba(255,255,255,.82);margin:0 0 16px}
+  .svc .more{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:14px;color:#fff}
+  .svc .more svg{width:16px;height:16px;transition:transform .2s}
+  .svc:hover .more svg{transform:translateX(4px)}
+  .svc.accent{background:linear-gradient(165deg,#ff6a3d 0%,var(--orange-600) 60%,var(--orange-800) 100%);
+    box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 -6px 16px rgba(94,32,16,.4) inset,var(--shadow-lg);
+    overflow:visible}
+  .svc.accent .plinth{background:linear-gradient(160deg,var(--orange-700),var(--orange-900));color:#fbd5c6}
+  /* peeking attendant resting on the top edge of the orange card */
+  .svc-peek{position:absolute;left:50%;bottom:100%;transform:translate(-50%,60px);width:74%;height:auto;
+    z-index:5;pointer-events:none;filter:drop-shadow(0 12px 16px rgba(0,0,0,.32))}
+
+  /* ---------- showcase (dark, material samples) ---------- */
+  .showcase{background:var(--ink);padding:110px 0}
+  .samples{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:14px}
+  .sample{border-radius:var(--r-lg);height:230px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:20px;box-shadow:var(--emboss-lg)}
+  .sample .tag{position:relative;z-index:3}
+  .sample .tag .ft{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+  .sample .tag .nm{font-weight:700;font-size:17px;margin-top:3px}
+  .s-matte{background:#141413;color:#fff;box-shadow:var(--emboss-lg),inset 0 0 60px rgba(0,0,0,.6)}
+  .s-gloss-black{background:linear-gradient(150deg,#2a2a28,#0c0c0b);color:#fff}
+  .s-teal{background:linear-gradient(160deg,#16c5cc,var(--teal-700));color:#fff;box-shadow:var(--emboss-lg),0 1px 0 rgba(255,255,255,.4) inset}
+  .s-gloss-teal{background:linear-gradient(150deg,#1fd0d7,var(--teal-800));color:#fff}
+  .s-orange{background:linear-gradient(160deg,#ff6a3d,var(--orange-700));color:#fff;box-shadow:var(--emboss-lg),0 1px 0 rgba(255,255,255,.4) inset}
+  .s-canvas{background:#e7e4dd;color:var(--ink);box-shadow:var(--emboss-lg)}
+  .s-paper{background:#f7f6f4;color:var(--ink);box-shadow:var(--emboss-lg)}
+  .s-brushed{background:linear-gradient(110deg,#3a3935,#56544e 50%,#3a3935);color:#fff}
+
+  /* ---------- portfolio ---------- */
+  .work{background:#0b0b0a;padding:110px 0}
+  .work-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:260px;gap:18px}
+  .wcard{position:relative;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-lg);cursor:pointer;transition:transform .28s var(--ease-out),box-shadow .28s}
+  .wcard:hover{transform:translateY(-5px);box-shadow:var(--shadow-xl)}
+  .wcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;transition:transform .5s var(--ease-out)}
+  .wcard:hover img{transform:scale(1.045)}
+  /* Design-System color wash — sits over the photo at rest, lifts on hover */
+  .wcard::before{content:"";position:absolute;inset:0;z-index:2;background:var(--tint,var(--teal-600));
+    opacity:.5;mix-blend-mode:multiply;transition:opacity .4s var(--ease-out)}
+  .wcard::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(150deg,rgba(255,255,255,.16),transparent 45%);
+    opacity:.5;transition:opacity .4s var(--ease-out);pointer-events:none}
+  .wcard:hover::before,.wcard:hover::after{opacity:0}
+  .wcard .lab{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:16px 18px;font-weight:700;font-size:15px;color:#fff;background:linear-gradient(to top,rgba(8,8,7,.82),transparent)}
+  .wcard .lab small{display:block;font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-300);margin-bottom:3px}
+  .wcard .gi{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.2)}
+  .wcard .gi svg{width:54px;height:54px;stroke-width:1.3}
+  /* Frank — fills the empty bottom-right grid cell, grounded at the base */
+  .work-portrait{position:relative;grid-column:3;grid-row:2 / span 2;pointer-events:none}
+  .work-portrait img{position:absolute;bottom:0;right:0;width:108%;max-width:none;height:auto;z-index:1;
+    filter:drop-shadow(0 10px 14px rgba(0,0,0,.35))}
+  /* contact shadow on the floor under his feet */
+  .work-portrait::after{content:"";position:absolute;left:26%;bottom:6px;width:42%;height:24px;border-radius:50%;
+    background:radial-gradient(ellipse at center, rgba(0,0,0,.62), rgba(0,0,0,0) 72%);filter:blur(9px);z-index:0}
+
+  /* ---------- final cta ---------- */
+  .final{background:#fff;padding:96px 0}
+  .final .card{position:relative;overflow:hidden;border-radius:var(--r-2xl);
+    display:grid;grid-template-columns:0.92fr 1.08fr;gap:24px;align-items:stretch;
+    padding:0 60px 0 44px;
+    background:radial-gradient(120% 130% at 18% 12%,#0d2b2c,var(--ink) 58%);color:#fff;box-shadow:var(--shadow-xl)}
+  .final-fig{position:relative;align-self:end;display:flex;align-items:flex-end;justify-content:center;min-height:400px}
+  .final-fig img{display:block;width:100%;max-width:470px;height:auto;position:relative;z-index:2}
+  /* contact shadow grounding the figure on the card surface */
+  .final-fig::after{content:"";position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+    width:66%;height:30px;border-radius:50%;
+    background:radial-gradient(ellipse at center, rgba(0,0,0,.55), rgba(0,0,0,0) 70%);filter:blur(12px);z-index:1}
+  .final-copy{align-self:center;text-align:right;padding:64px 0}
+  .final h2{font-weight:900;font-size:clamp(34px,3.7vw,58px);letter-spacing:-.035em;line-height:1.02;margin:14px 0 16px}
+  .final p{font-size:19px;line-height:1.6;color:rgba(255,255,255,.76);max-width:440px;margin:0 0 28px auto}
+  .final .cta-row{display:flex;gap:14px;justify-content:flex-end;flex-wrap:wrap}
+
+  /* ---------- footer ---------- */
+  footer{background:#080807;padding:64px 0 36px;color:#fff}
+  .fcols{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:32px;padding-bottom:46px;border-bottom:1px solid rgba(255,255,255,.1)}
+  .fcols h4{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-300);margin:0 0 16px}
+  .fcols a{display:block;font-size:14px;color:rgba(255,255,255,.64);margin-bottom:11px}
+  .fcols a:hover{color:#fff}
+  .social{display:flex;gap:10px;margin-top:20px}
+  .social a{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.8)}
+  .social a svg{width:18px;height:18px}
+  .fbot{display:flex;justify-content:space-between;align-items:center;padding-top:24px;flex-wrap:wrap;gap:12px;font-size:13px;color:rgba(255,255,255,.42)}
+
+  /* ---------- calculator ---------- */
+  .calc{background:var(--n-50);color:var(--ink);padding:110px 0}
+  .calc .sec-head{max-width:680px;margin:0 auto 50px;text-align:center}
+  .calc .sec-head h2{margin:14px 0 14px}
+  .calc .sec-head p{color:var(--n-600)}
+  .calc-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:stretch}
+  .calc-form{background:#fff;border-radius:var(--r-2xl);padding:38px 36px;box-shadow:var(--shadow-lg)}
+  .calc-label{display:block;font-weight:700;font-size:14px;color:var(--ink);margin-bottom:14px}
+  .prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .prod{display:flex;flex-direction:column;align-items:flex-start;gap:9px;text-align:left;cursor:pointer;
+    border:1.5px solid var(--n-200);background:#fff;border-radius:var(--r-md);padding:16px 15px 18px;
+    transition:transform .16s var(--ease-out),border-color .2s,box-shadow .24s,background .2s;font-family:inherit}
+  .prod:hover{border-color:var(--teal-300);transform:translateY(-2px)}
+  .prod.active{border-color:var(--teal-500);background:var(--teal-50);box-shadow:var(--shadow-sm),0 0 0 3px rgba(0,177,184,.12)}
+  .prod .pico{width:42px;height:42px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,#15c2c9,var(--teal-700));color:#fff;box-shadow:var(--shadow-sm),0 1px 0 rgba(255,255,255,.25) inset}
+  .prod .pico svg{width:22px;height:22px;stroke-width:1.85}
+  .prod.active .pico{background:linear-gradient(160deg,#ff6a3d,var(--orange-600))}
+  .prod .pname{font-weight:700;font-size:15px;line-height:1.18;letter-spacing:-.01em}
+  .prod .pprice{font-size:12px;font-weight:600;color:var(--n-500)}
+  .dims{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+  .dim label{display:block;font-weight:700;font-size:13px;color:var(--ink);margin-bottom:9px}
+  .dim input{width:100%;border:1.5px solid var(--n-200);border-radius:var(--r-sm);background:var(--n-50);
+    padding:14px 16px;font-family:inherit;font-weight:700;font-size:18px;color:var(--ink);outline:none;
+    box-shadow:var(--inset-soft);transition:border-color .2s,box-shadow .2s}
+  .dim input:focus{border-color:var(--teal-500);box-shadow:var(--inset-soft),0 0 0 3px rgba(0,177,184,.14)}
+  .calc-desc{margin:22px 0 0;font-size:13.5px;line-height:1.55;color:var(--n-500)}
+  .calc-result{position:relative;overflow:hidden;display:flex;flex-direction:column;
+    border-radius:var(--r-2xl);padding:38px 36px;color:#fff;
+    background:radial-gradient(120% 130% at 18% 8%,#0d2b2c,var(--ink) 60%);box-shadow:var(--shadow-xl)}
+  .calc-result .rlabel{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.56);position:relative;z-index:2}
+  .calc-total{font-weight:900;font-size:clamp(44px,5.4vw,68px);letter-spacing:-.03em;line-height:1;margin-top:10px;position:relative;z-index:2}
+  .calc-subline{margin-top:8px;font-size:14.5px;color:rgba(255,255,255,.72);position:relative;z-index:2}
+  .calc-break{margin-top:26px;border-radius:var(--r-md);background:rgba(255,255,255,.08);padding:18px 20px;
+    display:flex;flex-direction:column;gap:11px;position:relative;z-index:2}
+  .calc-row{display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:14.5px}
+  .calc-row .rl{color:rgba(255,255,255,.68)}
+  .calc-row .rv{font-weight:700;text-align:right}
+  .calc-min{border-radius:8px;background:rgba(255,255,255,.1);padding:7px 12px;font-size:12px;color:rgba(255,255,255,.82)}
+  .calc-cta{margin-top:auto;padding-top:26px;position:relative;z-index:2}
+  .calc-cta .plaque{width:100%;justify-content:center}
+  .calc-cta.disabled .plaque{opacity:.4;pointer-events:none;filter:saturate(.35)}
+  .calc-note{margin:14px 0 0;text-align:center;font-size:11.5px;color:rgba(255,255,255,.55);position:relative;z-index:2}
+  @media(max-width:880px){.calc-grid{grid-template-columns:1fr}}
+  @media(max-width:520px){.prod-grid{grid-template-columns:1fr}.dims{grid-template-columns:1fr}}
+
+  /* ---------- detailed quote form ---------- */
+  .quote{background:#fff;color:var(--ink);padding:110px 0;border-top:1px solid var(--n-100)}
+  .quote .sec-head{max-width:660px;margin:0 auto 46px;text-align:center}
+  .quote .sec-head h2{margin:14px 0 14px}
+  .quote .sec-head p{color:var(--n-600)}
+  .qcard{background:var(--n-50);border-radius:var(--r-2xl);padding:46px 44px;box-shadow:var(--shadow-lg);max-width:880px;margin:0 auto}
+  /* stage: form + the leaning attendant resting on its right edge */
+  .quote-stage{position:relative;max-width:1240px;margin:0 auto}
+  .quote-stage .qcard{max-width:820px;margin-left:100px}
+  .frank-lean{position:absolute;left:782px;right:auto;bottom:-2px;width:clamp(380px,38%,460px);height:auto;z-index:4;
+    pointer-events:none;filter:drop-shadow(-14px 16px 24px rgba(17,17,16,.20))}
+  .qrow{display:grid;gap:20px;margin-bottom:20px}
+  .qrow.two{grid-template-columns:1fr 1fr}
+  .qrow.three{grid-template-columns:1fr 1fr 1fr}
+  .qfield label{display:block;font-weight:700;font-size:13px;color:var(--ink);margin-bottom:9px}
+  .qfield input,.qfield select,.qfield textarea{width:100%;border:1.5px solid var(--n-200);border-radius:var(--r-sm);
+    background:#fff;padding:14px 16px;font-family:inherit;font-weight:500;font-size:16px;color:var(--ink);outline:none;
+    box-shadow:var(--inset-soft);transition:border-color .2s,box-shadow .2s}
+  .qfield input::placeholder,.qfield textarea::placeholder{color:var(--n-400)}
+  .qfield input:focus,.qfield select:focus,.qfield textarea:focus{border-color:var(--teal-500);
+    box-shadow:var(--inset-soft),0 0 0 3px rgba(0,177,184,.14)}
+  .qfield textarea{resize:vertical;min-height:122px;line-height:1.55}
+  .qfield select{appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:44px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2356544e' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 15px center}
+  .qcta{margin-top:6px}
+  .qcta .plaque{width:100%;justify-content:center;font-size:17px;padding:19px 28px}
+  .qnote{text-align:center;margin-top:16px;font-size:12.5px;color:var(--n-500)}
+  .qnote i{width:14px;height:14px;vertical-align:-2px;margin-right:4px}
+  @media(max-width:680px){.qrow.two,.qrow.three{grid-template-columns:1fr}.qcard{padding:34px 24px}}
+  @media(max-width:1080px){.frank-lean{display:none}.quote-stage .qcard{max-width:880px;margin:0 auto}}
+
+  .reveal{will-change:opacity,transform}
+  .reveal.in{animation:fpRise .7s var(--ease-out) both}
+  @keyframes fpRise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.reveal.in{animation:none}}
+
+  @media(max-width:920px){
+    .hero-stage,.svc-grid,.work-grid{grid-template-columns:1fr 1fr}
+    .stats .grid,.samples{grid-template-columns:1fr 1fr}
+    .fcols{grid-template-columns:1fr 1fr}
+    header nav{display:none}
+  }
+  @media(max-width:560px){
+    .hero-stage,.svc-grid,.work-grid,.stats .grid,.samples,.fcols{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body class="fp-dark">
+
+<header id="hdr">
+  <div class="wrap bar">
+    <a href="#top"><img src="assets/logo-futura-print-wordmark.png" alt="Futura Print" style="height:26px;display:block"></a>
+    <nav>
+      <a href="#services">Serviços</a>
+      <a href="#calculadora">Orçamento</a>
+      <a href="#showcase">Materiais</a>
+      <a href="#work">Projetos</a>
+      <a href="#contact">Estúdio</a>
+    </nav>
+    <div class="bar-right">
+      <a class="nav-ig" href="https://www.instagram.com/fpprintcomunicacao/" target="_blank" rel="noopener" aria-label="Instagram da Futura Print"><i data-lucide="instagram"></i></a>
+      <a class="plaque plaque-teal navcta" href="https://wa.me/5511970544742?text=Ol%C3%A1%2C%20gostaria%20de%20imprimir%20uma%20arte%20com%20voc%C3%AAs.%20Poderia%20me%20dar%20um%20or%C3%A7amento%3F" target="_blank" rel="noopener"><i data-lucide="pen-line"></i> Iniciar projeto</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero fp-grain-fine" id="top">
+  <div class="hero-video reveal in">
+    <video src="assets/hero-video.mp4" autoplay muted loop playsinline preload="auto" fetchpriority="low"></video>
+  </div>
+  <div class="hero-scrim"></div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <span class="badge reveal in"><span class="pulse"></span> IMPRESSÃO EM GRANDE FORMATO &amp; CENOGRAFIA</span>
+    <h1 class="reveal in">Onde a dimensão<br>encontra a <span style="color:var(--teal-300)">impressão.</span></h1>
+    <p class="sub reveal in">Tiramos a sua visão da tela e a trazemos para o mundo real — impressão premium em grande formato e impressão para cenografia sob medida.</p>
+    <div class="cta reveal in">
+      <a class="plaque plaque-orange" href="https://wa.me/5511970544742?text=Ol%C3%A1%2C%20gostaria%20de%20imprimir%20uma%20arte%20com%20voc%C3%AAs.%20Poderia%20me%20dar%20um%20or%C3%A7amento%3F" target="_blank" rel="noopener"><i data-lucide="pen-line"></i> Inicie seu projeto</a>
+      <a href="#calculadora" class="plaque plaque-ghost"><i data-lucide="calculator"></i> Calcular orçamento</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats fp-grain">
+  <div class="wrap">
+    <div class="grid">
+      <div class="stat reveal"><div class="n">+2</div><div class="l">ANOS DE EXPERIÊNCIA</div></div>
+      <div class="stat reveal"><div class="n">60+</div><div class="l">Clientes ativos</div></div>
+      <div class="stat reveal"><div class="n">3,1 m</div><div class="l">Largura máx. de impressão</div></div>
+      <div class="stat reveal"><div class="n">48 h</div><div class="l">Entrega expressa</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services fp-grain-fine" id="services">
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="services-head-row">
+      <div class="sec-head">
+        <span class="eyebrow" style="color:var(--teal-700)">O que fazemos</span>
+        <h2 class="reveal">Sua marca, construída no mundo físico.</h2>
+        <p class="reveal">De um único painel iluminado a um estande completo de feira — cada trabalho é medido ao milímetro, finalizado à mão e projetado para manter a cor ao ar livre.</p>
+      </div>
+      <div class="services-fig reveal">
+        <img src="assets/frank-materials.png" alt="Especialista Futura Print apresentando pôsteres, banners e substratos">
+      </div>
+    </div>
+    <div class="work-grid">
+      <div class="wcard reveal" style="--tint:var(--teal-600)"><img src="assets/work-banner.jpg" alt="Banner colorido em lona impressa"><div class="lab"><small>Impressão</small>Banners impressos</div></div>
+      <div class="wcard reveal" style="--tint:var(--orange-600)"><img src="assets/work-facade.jpg" alt="Fachada de loja com letreiro luminoso"><div class="lab"><small>Sinalização</small>Fachadas luminosas</div></div>
+      <div class="wcard reveal" style="--tint:var(--teal-700)"><img src="assets/work-vehicle.jpg" alt="Veículo com envelopamento gráfico"><div class="lab"><small>Envelopamento</small>Envelopamento veicular</div></div>
+      <div class="wcard reveal" style="--tint:var(--orange-700)"><img src="assets/work-stickers.jpg" alt="Adesivos recortados coloridos"><div class="lab"><small>Recorte</small>Adesivos recortados</div></div>
+      <div class="wcard reveal" style="--tint:var(--teal-800)"><img src="assets/work-cards.jpg" alt="Pilha de cartões de visita premium"><div class="lab"><small>Impressão</small>Cartões premium</div></div>
+      <div class="wcard reveal" style="--tint:var(--orange-600)"><img src="assets/work-sign.jpg" alt="Letras metálicas em ACM montadas na parede"><div class="lab"><small>Sinalização</small>Placas em ACM</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="calc fp-grain-fine" id="calculadora">
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--teal-700)">Calculadora instantânea</span>
+      <h2 class="reveal">Calcule seu orçamento agora.</h2>
+      <p class="reveal">Escolha o produto, informe as medidas e veja o valor na hora — depois é só enviar para o nosso WhatsApp.</p>
+    </div>
+    <div class="calc-grid reveal">
+      <div class="calc-form">
+        <span class="calc-label">Produto</span>
+        <div class="prod-grid" id="prodGrid"></div>
+        <div class="dims">
+          <div class="dim"><label for="cw">Largura (m)</label><input id="cw" inputmode="decimal" value="4"></div>
+          <div class="dim"><label for="ch">Altura (m)</label><input id="ch" inputmode="decimal" value="1"></div>
+          <div class="dim"><label for="cq">Quantidade</label><input id="cq" inputmode="numeric" value="1"></div>
+        </div>
+        <p class="calc-desc" id="calcDesc"></p>
+      </div>
+      <div class="calc-result fp-grain">
+        <div class="rlabel">Resultado</div>
+        <div class="calc-total" id="calcTotal">—</div>
+        <div class="calc-subline" id="calcDims">Informe as medidas</div>
+        <div class="calc-break" id="calcBreak"></div>
+        <div class="calc-cta" id="calcCtaWrap">
+          <a class="plaque plaque-orange" id="calcCta" href="#" target="_blank" rel="noopener"><i data-lucide="message-circle"></i> Solicitar orçamento no WhatsApp</a>
+        </div>
+        <p class="calc-note">Valor estimado. Pode variar conforme acabamento e arte final.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNICAL SHOWCASE -->
+<section class="showcase fp-grain-fine" id="showcase">
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--teal-300)">Materiais &amp; acabamentos</span>
+      <h2 class="reveal" style="color:#fff">Substratos reais. Acabamentos reais.</h2>
+      <p class="reveal" style="color:rgba(255,255,255,.72)">Imprimimos e construímos nos materiais que o seu conceito merece — fosco e brilhante, rígido e flexível, fotografados aqui como amostras físicas.</p>
+    </div>
+    <div class="samples">
+      <div class="sample s-matte fp-grain reveal"><div class="tag"><div class="ft">Fosco</div><div class="nm">MDF pintado</div></div></div>
+      <div class="sample s-gloss-black fp-gloss reveal"><div class="tag"><div class="ft">Brilhante</div><div class="nm">Painel de acrílico</div></div></div>
+      <div class="sample s-teal fp-grain reveal"><div class="tag"><div class="ft">Estrutural</div><div class="nm">Substrato teal</div></div></div>
+      <div class="sample s-gloss-teal fp-gloss reveal"><div class="tag"><div class="ft">Brilhante</div><div class="nm">Filme backlight</div></div></div>
+      <div class="sample s-canvas fp-grain reveal"><div class="tag"><div class="ft">Fosco</div><div class="nm">Lona pesada</div></div></div>
+      <div class="sample s-orange fp-gloss reveal"><div class="tag"><div class="ft">Destaque</div><div class="nm">Vinil de envelopamento</div></div></div>
+      <div class="sample s-brushed reveal"><div class="tag"><div class="ft">Metálico</div><div class="nm">Alumínio escovado</div></div></div>
+      <div class="sample s-paper fp-grain reveal"><div class="tag"><div class="ft">Fosco</div><div class="nm">Papel fine art</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--teal-300)">Trabalhos selecionados</span>
+      <h2 class="reveal" style="color:#fff">Escala real. Textura real.</h2>
+    </div>
+    <div class="svc-grid">
+      <div class="svc reveal">
+        <div class="plinth"><i data-lucide="printer"></i></div>
+        <h3>Grande formato premium</h3>
+        <p>Pôsteres, banners e grafismos de parede com até 3,1 m de largura — cor exata em CMYK e Pantone, em substrato fosco ou brilhante.</p>
+        <a class="more" href="#services">Explorar <i data-lucide="arrow-right"></i></a>
+      </div>
+      <div class="svc reveal">
+        <div class="plinth"><i data-lucide="flag"></i></div>
+        <h3>Banners de alta resolução</h3>
+        <p>Banners tensionados e telas em escala de estádio, reforçados e selados contra intempéries para longas exposições ao ar livre.</p>
+        <a class="more" href="#services">Explorar <i data-lucide="arrow-right"></i></a>
+      </div>
+      <div class="svc accent reveal">
+        <img class="svc-peek" src="assets/frank-peek.webp" alt="Atendente da Futura Print espiando por cima do card">
+        <div class="plinth"><i data-lucide="boxes"></i></div>
+        <h3>Impressão para cenografia</h3>
+        <p>Estandes, palcos e construções espaciais ganham vida com material impresso de qualidade — nos chame como parceiros do seu projeto cenográfico!</p>
+        <a class="more" href="#services">Explorar <i data-lucide="arrow-right"></i></a>
+      </div>
+      <div class="svc reveal">
+        <div class="plinth"><i data-lucide="car-front"></i></div>
+        <h3>Envelopamento de veículos &amp; frotas</h3>
+        <p>Envelopamentos de corte preciso e ajuste de contorno que transformam qualquer frota em um outdoor em movimento.</p>
+        <a class="more" href="#services">Explorar <i data-lucide="arrow-right"></i></a>
+      </div>
+      <div class="svc reveal">
+        <div class="plinth"><i data-lucide="store"></i></div>
+        <h3>Sinalização &amp; fachadas</h3>
+        <p>Letras iluminadas, fachadas e sinalização, projetadas para durar e brilhar.</p>
+        <a class="more" href="#services">Explorar <i data-lucide="arrow-right"></i></a>
+      </div>
+      <div class="svc reveal">
+        <div class="plinth"><i data-lucide="layers"></i></div>
+        <h3>Acabamento premium</h3>
+        <p>Laminação, montagem, corte de contorno e textura — os últimos dez por cento táteis.</p>
+        <a class="more" href="#services">Explorar <i data-lucide="arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DETAILED QUOTE -->
+<section class="quote" id="orcamento-detalhado">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow" style="color:var(--teal-700)">Orçamento detalhado</span>
+      <h2 class="reveal">Conte o que você precisa.</h2>
+      <p class="reveal">Preencha os detalhes — respondemos pelo WhatsApp em minutos. É só anexar sua arte na conversa.</p>
+    </div>
+    <div class="quote-stage reveal">
+    <form class="qcard" id="quoteForm" novalidate>
+      <div class="qrow two">
+        <div class="qfield"><label for="qNome">Seu nome</label><input id="qNome" type="text" placeholder="Como podemos te chamar"></div>
+        <div class="qfield"><label for="qZap">Seu WhatsApp</label><input id="qZap" type="tel" inputmode="tel" placeholder="(11) 90000-0000"></div>
+      </div>
+      <div class="qrow three">
+        <div class="qfield"><label for="qProduto">Produto</label>
+          <select id="qProduto">
+            <option>Banner em Lona</option>
+            <option>Adesivo Vinil</option>
+            <option>Fachada</option>
+          </select>
+        </div>
+        <div class="qfield"><label for="qMaterial">Material</label>
+          <select id="qMaterial">
+            <option>Lona 440g</option>
+            <option>Lona Backlight</option>
+            <option>Vinil Adesivo</option>
+            <option>Vinil Perfurado</option>
+            <option>PS 2mm</option>
+            <option>ACM 3mm</option>
+            <option>Papel Couché 300g</option>
+          </select>
+        </div>
+        <div class="qfield"><label for="qAcabamento">Acabamento</label>
+          <select id="qAcabamento">
+            <option>Ilhós nos cantos</option>
+            <option>Bainha reforçada</option>
+            <option>Recorte eletrônico</option>
+            <option>Aplicação inclusa</option>
+            <option>Laminação fosca</option>
+            <option>Laminação brilho</option>
+            <option>Sem acabamento</option>
+          </select>
+        </div>
+      </div>
+      <div class="qrow">
+        <div class="qfield"><label for="qObs">Observações</label><textarea id="qObs" placeholder="Medidas, cores, quantidade, prazo desejado..."></textarea></div>
+      </div>
+      <div class="qcta">
+        <button type="submit" class="plaque plaque-orange"><i data-lucide="message-circle"></i> Solicitar orçamento agora</button>
+      </div>
+      <p class="qnote"><i data-lucide="paperclip"></i>Envie a arte direto na conversa do WhatsApp após o contato.</p>
+    </form>
+      <img class="frank-lean" src="assets/frank-leaning.webp" alt="Atendente da Futura Print apoiado no formulário, indicando o orçamento">
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final" id="contact">
+  <div class="wrap">
+    <div class="card fp-grain reveal">
+      <div class="final-fig">
+        <img src="assets/frank-phone.png" alt="Especialista Futura Print pronto para atender">
+      </div>
+      <div class="final-copy" style="position:relative;z-index:2">
+        <span class="eyebrow" style="color:var(--teal-300)">Vamos construir</span>
+        <h2>Para fora da tela.<br>Para dentro do ambiente.</h2>
+        <p>Conte-nos sobre o espaço e a escala. Cuidamos da precisão, da textura e da impressão.</p>
+        <div class="cta-row">
+          <a class="plaque plaque-orange" href="https://wa.me/5511970544742?text=Ol%C3%A1%2C%20gostaria%20de%20imprimir%20uma%20arte%20com%20voc%C3%AAs.%20Poderia%20me%20dar%20um%20or%C3%A7amento%3F" target="_blank" rel="noopener"><i data-lucide="pen-line"></i> Inicie seu projeto</a>
+          <a class="plaque plaque-ghost" href="https://wa.me/5511970544742?text=Ol%C3%A1%2C%20gostaria%20de%20imprimir%20uma%20arte%20com%20voc%C3%AAs.%20Poderia%20me%20dar%20um%20or%C3%A7amento%3F" target="_blank" rel="noopener"><i data-lucide="message-circle"></i> Fale com o estúdio</a>
+          <a class="plaque plaque-ghost" href="https://www.instagram.com/fpprintcomunicacao/" target="_blank" rel="noopener"><i data-lucide="instagram"></i> Siga no Instagram</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div>
+        <img src="assets/logo-futura-print-wordmark.png" alt="Futura Print" style="height:28px">
+        <p style="font-size:14px;line-height:1.6;color:rgba(255,255,255,.6);max-width:280px;margin-top:18px">Impressão premium em grande formato e cenografia sob medida. Onde a dimensão encontra a impressão.</p>
+        <div class="social">
+          <a href="https://www.instagram.com/fpprintcomunicacao/" target="_blank" rel="noopener" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+        </div>
+      </div>
+      <div><h4>Serviços</h4><a href="#">Grande formato</a><a href="#">Banners</a><a href="#">Sinalização</a><a href="#">Cenografia</a></div>
+      <div><h4>Estúdio</h4><a href="#">Projetos</a><a href="#">Materiais</a><a href="#">Sobre</a><a href="#">
+</a></div>
+      <div><h4>Contato</h4><a href="https://wa.me/5511970544742?text=Ol%C3%A1%2C%20gostaria%20de%20imprimir%20uma%20arte%20com%20voc%C3%AAs.%20Poderia%20me%20dar%20um%20or%C3%A7amento%3F" target="_blank" rel="noopener">Solicitar orçamento</a><a href="https://www.google.com/maps/search/?api=1&amp;query=Avenida%20Elias%20Alves%20da%20Costa%2C%20Vargem%20Grande%20Paulista%20-%20SP%2C%2006730-000" target="_blank" rel="noopener">Av. Elias Alves da Costa<br>Vargem Grande Paulista – SP · 06730-000</a><a href="mailto:futuraprintcomunicacao@gmail.com">futuraprintcomunicacao@gmail.com</a><a href="https://wa.me/5511970544742?text=Ol%C3%A1%2C%20gostaria%20de%20imprimir%20uma%20arte%20com%20voc%C3%AAs.%20Poderia%20me%20dar%20um%20or%C3%A7amento%3F" target="_blank" rel="noopener">+55 11 97054-4742</a></div>
+    </div>
+    <div class="fbot">
+      <span>© 2026 Futura Print · Comunicação Visual - Designed by Daniel Corrêa
+</span>
+      <span class="fp-caps" style="letter-spacing:.16em">ONDE A DIMENSÃO ENCONTRA A IMPRESSÃO</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+  // header frost
+  const hdr=document.getElementById('hdr');
+  const onScroll=()=>{hdr.classList.toggle('scrolled',window.scrollY>20); reveal();};
+  // reveal (scroll events don't fire in scaled preview iframe → poll until done)
+  function reveal(){
+    const vh=window.innerHeight;let rem=0;
+    document.querySelectorAll('.reveal').forEach(el=>{
+      if(el.classList.contains('in'))return;
+      const r=el.getBoundingClientRect();
+      if(r.top<vh*0.9&&r.bottom>0)el.classList.add('in');else rem++;
+    });return rem;
+  }
+  (function tick(){ if(reveal()>0) setTimeout(tick,100); })();
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',reveal);
+
+  /* ---------- budget calculator ---------- */
+  (function(){
+    const WA='5511970544742';
+    const products=[
+      {id:'banner', name:'Banner em Lona', icon:'flag',     pricePerM2:50,  minPrice:40,  desc:'Lona 440g impressa em alta resolução, com ilhós e bainha.'},
+      {id:'adesivo',name:'Adesivo Vinil',  icon:'sticker',  pricePerM2:45,  minPrice:25,  desc:'Vinil adesivo recortado ou impresso, indoor e outdoor.'},
+      {id:'fachada',name:'Fachada',        icon:'store',    pricePerM2:700, minPrice:250, desc:'Fachada em ACM 3mm ou letras caixa com iluminação LED.'}
+    ];
+    let pid=products[0].id;
+    const brl=v=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(v);
+    const grid=document.getElementById('prodGrid');
+    if(!grid)return;
+    const cw=document.getElementById('cw'),ch=document.getElementById('ch'),cq=document.getElementById('cq');
+    const elTotal=document.getElementById('calcTotal'),elDims=document.getElementById('calcDims'),
+          elBreak=document.getElementById('calcBreak'),elDesc=document.getElementById('calcDesc'),
+          elCta=document.getElementById('calcCta'),elCtaWrap=document.getElementById('calcCtaWrap');
+    function renderProducts(){
+      grid.innerHTML=products.map(p=>
+        '<button type="button" class="prod'+(p.id===pid?' active':'')+'" data-id="'+p.id+'">'+
+          '<span class="pico"><i data-lucide="'+p.icon+'"></i></span>'+
+          '<span class="pname">'+p.name+'</span>'+
+          '<span class="pprice">'+brl(p.pricePerM2)+'/m²</span>'+
+        '</button>').join('');
+      lucide.createIcons();
+      grid.querySelectorAll('.prod').forEach(b=>b.addEventListener('click',()=>{pid=b.dataset.id;renderProducts();update();}));
+    }
+    function update(){
+      const p=products.find(x=>x.id===pid);
+      const w=Math.max(0,parseFloat((cw.value||'').replace(',','.'))||0);
+      const h=Math.max(0,parseFloat((ch.value||'').replace(',','.'))||0);
+      const q=Math.max(1,parseInt(cq.value)||1);
+      const area=w*h;
+      let unit=area*p.pricePerM2,applied=false;
+      if(p.minPrice&&unit<p.minPrice){unit=p.minPrice;applied=true;}
+      const total=unit*q, valid=w>0&&h>0;
+      elDesc.textContent=p.desc;
+      elTotal.textContent=valid?brl(total):'—';
+      elDims.textContent=valid?(w+'m × '+h+'m = '+area.toFixed(2)+' m²'+(q>1?(' × '+q+' un.'):'')):'Informe as medidas';
+      let rows='<div class="calc-row"><span class="rl">Produto</span><span class="rv">'+p.name+'</span></div>'+
+               '<div class="calc-row"><span class="rl">Preço por m²</span><span class="rv">'+brl(p.pricePerM2)+'</span></div>';
+      if(valid)rows+='<div class="calc-row"><span class="rl">Subtotal por unidade</span><span class="rv">'+brl(unit)+'</span></div>';
+      if(applied)rows+='<div class="calc-min">* Valor mínimo do pedido aplicado</div>';
+      elBreak.innerHTML=rows;
+      const msg='Olá! Quero um orçamento:\n\n• Produto: '+p.name+'\n• Medidas: '+w+'m x '+h+'m\n• Quantidade: '+q+'\n• Valor estimado: '+brl(total);
+      elCta.href='https://wa.me/'+WA+'?text='+encodeURIComponent(msg);
+      elCtaWrap.classList.toggle('disabled',!valid);
+    }
+    [cw,ch,cq].forEach(i=>i.addEventListener('input',update));
+    renderProducts();update();
+  })();
+
+  /* ---------- detailed quote → WhatsApp ---------- */
+  (function(){
+    const WA='5511970544742';
+    const form=document.getElementById('quoteForm');
+    if(!form)return;
+    const val=id=>(document.getElementById(id).value||'').trim();
+    form.addEventListener('submit',e=>{
+      e.preventDefault();
+      const nome=val('qNome'),zap=val('qZap'),obs=val('qObs');
+      let msg='Olá! Gostaria de um orçamento detalhado:\n';
+      if(nome)msg+='\n• Nome: '+nome;
+      msg+='\n• Produto: '+val('qProduto');
+      msg+='\n• Material: '+val('qMaterial');
+      msg+='\n• Acabamento: '+val('qAcabamento');
+      if(obs)msg+='\n• Observações: '+obs;
+      if(zap)msg+='\n• Meu WhatsApp: '+zap;
+      msg+='\n\nVou enviar a arte aqui pela conversa.';
+      window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(msg),'_blank','noopener');
+    });
+  })();
+</script>
+</body>
+</html>
